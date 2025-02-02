@@ -1,4 +1,4 @@
-void window3d(int x, int y, int z);
+void window3d(int x, int y, int z,int xx,int yy,int zz);
 void draw_line(int x0, int y0, int x1, int y1, int color);
 void rotate_y(int *x, int *z, float angle);
 void draw_cube();
@@ -928,25 +928,28 @@ void pixelsa(char a, int locs)
     pixels(a,locs+0xa0000);
 
 }
-void window3d(int x, int y, int z) {
-    int screen_x = (x*256)  / (z + 256) + SCREEN_WIDTH / 2;
-    int screen_y = (y * 256) / (z + 256) + SCREEN_HEIGHT / 2;
-    pixelsa(0,screen_x+ (screen_y*320)); // Branco
-}
-
 void draw_line(int x0, int y0, int x1, int y1, int color) {
     int dx = aabs(x1 - x0), sx = x0 < x1 ? 1 : -1;
     int dy = -aabs(y1 - y0), sy = y0 < y1 ? 1 : -1; 
     int err = dx + dy, e2; 
 
     while (1) {
-        pixelsa(0,x0+ (y0*300));
+        pixelsa((char)color,x0+ (y0*320));
         if (x0 == x1 && y0 == y1) break;
         e2 = 2 * err;
         if (e2 >= dy) { err += dy; x0 += sx; }
         if (e2 <= dx) { err += dx; y0 += sy; }
     }
 }
+
+void window3d(int x, int y, int z,int xx,int yy,int zz) {
+    int screen_x = (x*256)  / (z + 256) + SCREEN_WIDTH / 2;
+    int screen_y = (y * 256) / (z + 256) + SCREEN_HEIGHT / 2;
+    int screen_x2 = (xx*256)  / (zz + 256) + SCREEN_WIDTH / 2;
+    int screen_y2 = (yy * 256) / (zz + 256) + SCREEN_HEIGHT / 2;
+    draw_line(screen_x, screen_y,screen_x2, screen_y2,0); // Branco
+}
+
 
 
 int ang(double a)
@@ -967,10 +970,11 @@ void draw_cube() {
     
     for (int i = 0; i < 8; i++) {
         rotate_y(&cube[i][0], &cube[i][2],3); // Roda o cubo
-        window3d(cube[i][0], cube[i][1], cube[i][2]); // Desenha os pontos
+        
         
 
     }
+    for (int i = 0; i < 8; i=i+2) window3d(cube[i][0], cube[i][1], cube[i][2],cube[i+1][0], cube[i+1][1], cube[i+1][2]); // Desenha os pontos
 } 
 
 void kernel_main()
@@ -994,7 +998,7 @@ void kernel_main()
                     draw_cube()	;
                     
                     for(i=0;i<32000000;i++)a=i*1;
-                    n++;
+                    cls(14);
 		}		
 				
 		
