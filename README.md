@@ -1,4 +1,1 @@
-# decompiler.online.64bits
-
-
-decompiler online 64 bits
+32 compiler operation system compile graphics
