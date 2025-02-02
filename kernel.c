@@ -971,12 +971,13 @@ void draw_cube() {
     int i=0;
     
     for (int i = 0; i < 8; i++) {
-        rotate_y(&cube[i][0], &cube[i][2],3); // Roda o cubo
+        rotate_y(&cube[i][0], &cube[i][2],1); // Roda o cubo
         
         
 
     }
-    for (int i = 0; i < 7; i=i+1) window3d(cube[i][0], cube[i][1], cube[i][2],cube[i+1][0], cube[i+1][1], cube[i+1][2]); // Desenha os pontos
+    window3d(cube[7][0], cube[7][1], cube[7][2],cube[0][0], cube[0][1], cube[0][2]);
+    for (int i = 0; i < 8; i=i+1) window3d(cube[i][0], cube[i][1], cube[i][2],cube[i+1][0], cube[i+1][1], cube[i+1][2]); // Desenha os pontos
 } 
 
 void kernel_main()
