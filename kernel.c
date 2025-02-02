@@ -957,8 +957,10 @@ int ang(double a)
     return (int)a*9.54;
 }
 void rotate_y(int *x, int *z, float angle) {
-    int new_x = (*x) * ycos(ang(angle)) - (*z) * xsin(ang(angle));
-    int new_z = (*x) * xsin(ang(angle)) + (*z) * ycos(ang(angle));
+    float angles=angle;
+    if(angles>3.1415927)angles=0;
+    int new_x = (*x) * ycos(ang(angles)) - (*z) * xsin(ang(angles));
+    int new_z = (*x) * xsin(ang(angles)) + (*z) * ycos(ang(angles));
     *x = new_x;
     *z = new_z;
 }
@@ -974,7 +976,7 @@ void draw_cube() {
         
 
     }
-    for (int i = 0; i < 8; i=i+2) window3d(cube[i][0], cube[i][1], cube[i][2],cube[i+1][0], cube[i+1][1], cube[i+1][2]); // Desenha os pontos
+    for (int i = 0; i < 7; i=i+1) window3d(cube[i][0], cube[i][1], cube[i][2],cube[i+1][0], cube[i+1][1], cube[i+1][2]); // Desenha os pontos
 } 
 
 void kernel_main()
