@@ -16,6 +16,7 @@ int xxx=0;
 int yyy=0;
 int zzz=0;
 int video;
+float angler=0.00f;
 int SCREEN_HEIGHT=200;
 int SCREEN_WIDTH=320;
  char *keymap="==1234567890-===qwertyuiop====asdfghjkl====\\zxcvbnm,.;/==== ";
@@ -28,7 +29,10 @@ int cube[8][3] = {
         {-50, -50, -50}, {50, -50, -50}, {50, 50, -50}, {-50, 50, -50},
         {-50, -50, 50}, {50, -50, 50}, {50, 50, 50}, {-50, 50, 50}
     };
-
+int cubes[8][3] = {
+        {-50, -50, -50}, {50, -50, -50}, {50, 50, -50}, {-50, 50, -50},
+        {-50, -50, 50}, {50, -50, 50}, {50, 50, 50}, {-50, 50, 50}
+    };
 // Estrutura para representar um bitmap com cabeçalho
 typedef struct Bitmap {
     int x;          // Comprimento em X
@@ -954,13 +958,12 @@ void window3d(int x, int y, int z,int xx,int yy,int zz) {
 
 int ang(double a)
 {
-    return (int)a*9.54;
+    double f=a*9.54;
+    return (int)f;
 }
 void rotate_y(int *x, int *z, float angle) {
-    float angles=angle;
-    if(angles>3.1415927)angles=0;
-    int new_x = (*x) * ycos(ang(angles)) - (*z) * xsin(ang(angles));
-    int new_z = (*x) * xsin(ang(angles)) + (*z) * ycos(ang(angles));
+    int new_x = (*x) * ycos(ang(angle)) - (*z) * xsin(ang(angle));
+    int new_z = (*x) * xsin(ang(angle)) + (*z) * ycos(ang(angle));
     *x = new_x;
     *z = new_z;
 }
@@ -969,13 +972,25 @@ void rotate_y(int *x, int *z, float angle) {
 void draw_cube() {
     int a=0;
     int i=0;
-    
+    float angle=1;
+    int n=0;
+    int j=0;
+    angler=angler+angle;
     for (int i = 0; i < 8; i++) {
-        rotate_y(&cube[i][0], &cube[i][2],1); // Roda o cubo
+        rotate_y(&cube[i][0], &cube[i][2],angle); // Roda o cubo
         
         
 
     }
+        
+    if (angler>3.1415927*2){
+        angler=0.00f;
+        for(n=0;n<8;n++)
+        {
+             for(j=0;j<3;j++)cube[n][j]=cubes[n][j];
+        }
+    }
+
         for (int i = 0; i < 3; i=i+1)
         { 
             window3d(cube[i][0], cube[i][1], cube[i][2],cube[i+1][0], cube[i+1][1], cube[i+1][2]); //
@@ -1009,7 +1024,7 @@ void kernel_main()
                 {
                     draw_cube()	;
                     
-                    for(i=0;i<32000000;i++)a=i*1;
+                    for(i=0;i<62000000;i++)a=i*1;
                     cls(14);
 		}		
 				
