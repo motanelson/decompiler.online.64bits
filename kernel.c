@@ -1,3 +1,4 @@
+#include <stdint.h>
 void window3d(int x, int y, int z,int xx,int yy,int zz);
 void draw_line(int x0, int y0, int x1, int y1, int color);
 void rotate_y(int *x, int *z, float angle);
@@ -927,6 +928,20 @@ double calcX(int angle) {
 double calcY(int angle) {
   return ycos(angle);
 }
+static inline void outbs(uint16_t port,uint8_t value)
+{
+    asm volatile("outb %1 , %0" : : 
+ "dN" (port), "a" (value) );
+
+}
+static inline uint8_t inbs(uint16_t port)
+{
+    uint8_t ret;
+    asm volatile("inb %1 , %0" : 
+   "=a" (ret) :"dN" (port) );
+    return ret;
+}
+
 void pixelsa(char a, int locs)
 {
     pixels(a,locs+0xa0000);
@@ -1017,14 +1032,20 @@ void kernel_main()
 		unsigned char* addr;
 		cls(14);
 		NULL=0;
-		
-		memoryStart = (unsigned char *)0x200000;
+		int t=0;
+                memoryStart = (unsigned char *)0x200000;
                 n=0;
 		for(;;)
-                {
+                {   
+                    t=1;
                     draw_cube()	;
-                    
-                    for(i=0;i<62000000;i++)a=i*1;
+                    n=(int)inbs(0x71);
+                    while(t)
+                    {
+                        outbs(0x70,0);
+                        if(inbs(0x71)!=n)t=0;
+                    } 
+                    //for(i=0;i<62000000;i++)a=i*1;
                     cls(14);
 		}		
 				
