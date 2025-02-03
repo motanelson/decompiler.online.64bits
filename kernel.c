@@ -976,10 +976,19 @@ void draw_cube() {
         
 
     }
-    window3d(cube[7][0], cube[7][1], cube[7][2],cube[0][0], cube[0][1], cube[0][2]);
-    for (int i = 0; i < 8; i=i+1) window3d(cube[i][0], cube[i][1], cube[i][2],cube[i+1][0], cube[i+1][1], cube[i+1][2]); // Desenha os pontos
+        for (int i = 0; i < 3; i=i+1)
+        { 
+            window3d(cube[i][0], cube[i][1], cube[i][2],cube[i+1][0], cube[i+1][1], cube[i+1][2]); //
+            window3d(cube[i+4][0], cube[i+4][1], cube[i+4][2],cube[i+5][0], cube[i+5][1], cube[i+5][2]); //
+            window3d(cube[i][0], cube[i][1], cube[i][2],cube[i+4][0], cube[i+4][1], cube[i+4][2]); //
+        }
+        window3d(cube[3][0], cube[3][1], cube[3][2],cube[0][0], cube[0][1], cube[0][2]); //
+        window3d(cube[4][0], cube[4][1], cube[4][2],cube[7][0], cube[7][1], cube[7][2]); //
+        window3d(cube[0][0], cube[0][1], cube[0][2],cube[3][0], cube[3][1], cube[3][2]); //
+        window3d(cube[0][0], cube[0][1], cube[0][2],cube[3][0], cube[3][1], cube[3][2]); //
+        window3d(cube[3][0], cube[3][1], cube[3][2],cube[7][0], cube[7][1], cube[7][2]); //
 } 
-
+         
 void kernel_main()
 {
 		Bitmap *bmp;
