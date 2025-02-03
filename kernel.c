@@ -1,4 +1,6 @@
 #include <stdint.h>
+static inline void outbs(uint16_t port,uint8_t value);
+static inline uint8_t inbs(uint16_t port);
 void window3d(int x, int y, int z,int xx,int yy,int zz);
 void draw_line(int x0, int y0, int x1, int y1, int color);
 void rotate_y(int *x, int *z, float angle);
@@ -827,29 +829,19 @@ void uintToStr(unsigned int num, char *str) {
 }
 // Função para pausar a execução por um número de segundos
 void sleeps(int seconds) {
-    volatile unsigned int *timer = (volatile unsigned int *)0x46C;
-    unsigned long long nows, after;
-
-    // Converte segundos em ticks (1 tick = 1/18.2 segundos)
-    unsigned int seconds18 = (unsigned int)seconds * 18;
-
-    // Obtém o tempo atual em ticks
-    nows = *timer;
-
-    // Calcula o tempo após o qual queremos acordar
-    after = nows + seconds18;
-
-    if (after < nows) {
-        // Se after for menor que nows, significa que ocorreu um overflow do timer
-        // Portanto, esperamos até que nows seja maior ou igual a after
-        while (*timer < after) {
-            // Espera
-        }
-    } else {
-        // Se after for maior que nows, simplesmente esperamos até que nows seja maior ou igual a after
-        while (*timer < after) {
-            // Espera
-        }
+    int t=0;
+    int n=0;
+    int j=0;
+    for(j=0;j<seconds;j++)
+    {
+        t=1;
+        outbs(0x70,0);
+        n=(int)inbs(0x71);
+        while(t)
+                    {
+                        outbs(0x70,0);
+                        if(inbs(0x71)!=n)t=0;
+                    } 
     }
 }
 
@@ -1037,15 +1029,8 @@ void kernel_main()
                 n=0;
 		for(;;)
                 {   
-                    t=1;
                     draw_cube()	;
-                    n=(int)inbs(0x71);
-                    while(t)
-                    {
-                        outbs(0x70,0);
-                        if(inbs(0x71)!=n)t=0;
-                    } 
-                    //for(i=0;i<62000000;i++)a=i*1;
+                    sleeps(1);
                     cls(14);
 		}		
 				
