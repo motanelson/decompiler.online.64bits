@@ -1027,14 +1027,19 @@ void kernel_main()
 		int t=0;
                 memoryStart = (unsigned char *)0x200000;
                 n=0;
-		for(;;)
+                t=1;
+		while(t)
                 {   
                     draw_cube()	;
                     sleeps(1);
+                    n=getKeys();
+                    if(n==1)t=0;
                     cls(14);
 		}		
-				
+		for(;;)
+                {   
 		
+		}
 
 			  
 	
